@@ -94,4 +94,25 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
     }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState); // 반드시 호출해 주세요.
+
+        // 추가로 자료를 저장하는 코드는 여기에 작성 하세요.
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // 추가로 자료를 복원하는 코드는 여기에 작성하세요.
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        // 추가로 자료를 복원하는 코드는 여기에 작성하세요.
+    }
+
 }
