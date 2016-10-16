@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState); // 반드시 호출해 주세요.
-
+        // 상태임시저장하기
         // 추가로 자료를 저장하는 코드는 여기에 작성 하세요.
     }
 
