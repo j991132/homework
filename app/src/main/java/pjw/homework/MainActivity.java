@@ -13,32 +13,32 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-//변수선언
+    //전역변수선언
     Button addBtn;
-    Button btn;
+    Button[] btn = new Button[20];
     LinearLayout layout;
     Context context;
     ScrollView sv;
     int count = 0;
     String id = null;
-    int num=0;
+    String[] subject = new String[20];
+    int num = 0;
+    int[] studentnumber = new int[20];
     String Id;
-
+    int[] activitynumber = new int[20];
+    int i=0;
+    String[] name= new String[20];
+    int[] studentnum = new int[20];
+    int[] actnum = new int[20];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // restoreFromSavedState();
 
-        if (id != null && num != 0) {
-            layout.addView(btn);
-        }
-
-
-        addBtn = (Button)findViewById(R.id.addBtn);
+        addBtn = (Button) findViewById(R.id.addBtn);
         //sv = (ScrollView)findViewById(R.id.scrollView);
-        layout = (LinearLayout)findViewById(R.id.layout);
+        layout = (LinearLayout) findViewById(R.id.layout);
         context = this;
 //추가버튼 눌렀을때
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,21 +75,23 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "과제명" + id + "학생수" + num,
                                     Toast.LENGTH_SHORT).show();
 
-                            //Button btn = new Button(context);
-                            btn = new Button(context);
+                            subject[count-1] = id;
+                            studentnumber[count-1]=num;
+                            activitynumber[count-1]=count;
+                            btn[count-1] = new Button(context);
                             //btn.setText("버튼" + String.valueOf(count)); 원래 번호증가 버튼
-                            btn.setText("" + id);
-                            btn.setId(count);
-                            btn.setOnClickListener(new View.OnClickListener() {
-                                                       @Override
-                                                       public void onClick(View v) {
-                                                           Toast.makeText(MainActivity.this, (v.getId()) + "액티비티호출",
-                                                                   Toast.LENGTH_SHORT).show();
-                                                       }
-                                                   }
+                            btn[count-1].setText("" + subject[count - 1]);
+                            btn[count-1].setId(count);
+                            btn[count-1].setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    Toast.makeText(MainActivity.this, (v.getId()) + "액티비티호출",
+                                                                            Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
 
                             );
-                            layout.addView(btn);
+                            layout.addView(btn[count-1]);
                             ok.dismiss();
                         } else {
                             Toast.makeText(MainActivity.this, "입력된 과제명 또는 학생 수가 없습니다.",
@@ -105,20 +107,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState); // 반드시 호출해 주세요.
+
+   // @Override
+   // protected void onSaveInstanceState(Bundle outState) {
+   //     super.onSaveInstanceState(outState); // 반드시 호출해 주세요.
         // 상태임시저장하기
         // 추가로 자료를 저장하는 코드는 여기에 작성 하세요.
 
-    }
+   // }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
+  //  @Override
+  //  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+   //     super.onRestoreInstanceState(savedInstanceState);
 
         // 추가로 자료를 복원하는 코드는 여기에 작성하세요.
-    }
+  //  }
 
     @Override
     protected void onPause() {
@@ -127,15 +130,13 @@ public class MainActivity extends AppCompatActivity {
         // 추가로 자료를 복원하는 코드는 여기에 작성하세요.
         saveCurrentState();
     }
+
     @Override
     protected void onRestart() {
         super.onRestart();
 
         // 추가로 자료를 복원하는 코드는 여기에 작성하세요.
-        restoreFromSavedState();
-        if (id != null && num != 0) {
-            layout.addView(btn);
-        }
+
 
     }
 
@@ -152,26 +153,54 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         // 추가로 자료를 복원하는 코드는 여기에 작성하세요.
-        restoreFromSavedState();
-
+      restoreFromSavedState();
+      addbtn();
     }
 
     protected void saveCurrentState() {
         SharedPreferences pref = getSharedPreferences("SaveState", MODE_PRIVATE);
         SharedPreferences.Editor edit = pref.edit();
-        edit.putString("actnum", Id);
-        edit.putString("name", id);
-        edit.putInt("studentnum", num);
+        for(i=0;i<count;i++) {
+            edit.putInt("actnum["+i+"]", activitynumber[i]);
+            edit.putString("name["+i+"]", subject[i]);
+            edit.putInt("studentnum["+i+"]", studentnumber[i]);
+             }
         edit.putInt("actcount", count);
         edit.commit();
     }
 
     protected void restoreFromSavedState() {
         SharedPreferences pref = getSharedPreferences("SaveState", MODE_PRIVATE);
-        Id = pref.getString("actnum", Id);
-        id = pref.getString("name", id);
-        num = pref.getInt("studentnum", num);
         count = pref.getInt("actcount", count);
+        for(i=0;i<count;i++) {
+            activitynumber[i] = pref.getInt("actnum", activitynumber[i]);
+            subject[i] = pref.getString("name["+i+"]", subject[i]);
+            studentnumber[i] = pref.getInt("studentnum", studentnumber[i]);
 
+        }
+    }
+
+    protected void addbtn() {
+        if (count != 0) {
+
+          for (i = 0; i < count; i++) {
+          btn[i] = new Button(context);
+        //btn.setText("버튼" + String.valueOf(count)); 원래 번호증가 버튼
+          btn[i].setText("" + subject[i]);
+          btn[i].setId(i + 1);
+          btn[i].setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+                                          Toast.makeText(MainActivity.this, (v.getId()) + "액티비티호출",
+                                                  Toast.LENGTH_SHORT).show();
+                                      }
+                                  }
+
+        );
+          layout.addView(btn[i]);
     }
 }
+
+        }
+    }
+
