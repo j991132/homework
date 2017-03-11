@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
                             );
                             layout.addView(btn[count-1]);
+                            saveCurrentState();
                             ok.dismiss();
                         } else {
                             Toast.makeText(MainActivity.this, "입력된 과제명 또는 학생 수가 없습니다.",
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        restoreFromSavedState();
+        addbtn();
     }
 
    // @Override
@@ -153,8 +156,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         // 추가로 자료를 복원하는 코드는 여기에 작성하세요.
-      restoreFromSavedState();
-      addbtn();
+
     }
 
     protected void saveCurrentState() {
