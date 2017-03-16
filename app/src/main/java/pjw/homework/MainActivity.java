@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //초기화 명령
+
             }
         });
 //추가버튼 눌렀을때
@@ -121,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+ //버튼 길게 눌렀을 때
+
+
+
+ //저장상태 복구
         restoreFromSavedState();
         addbtn();
     }
@@ -210,9 +215,19 @@ public class MainActivity extends AppCompatActivity {
                                           Toast.makeText(MainActivity.this, (v.getId()) + "액티비티호출",
                                                   Toast.LENGTH_SHORT).show();
                                       }
-                                  }
+                                  });
+              btn[i].setOnLongClickListener(new View.OnLongClickListener(){
 
-        );
+                  @Override
+                  public boolean onLongClick(View view) {
+                      //다이얼로그생성
+                      final Dialog delete = new Dialog(context);
+                      delete.setTitle("삭제할까요?");
+                      delete.setContentView(R.layout.delete);
+                      delete.show();
+                      return true;
+                  }
+              });
           layout.addView(btn[i]);
     }
 }
