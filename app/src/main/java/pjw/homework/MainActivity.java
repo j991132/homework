@@ -224,6 +224,22 @@ public class MainActivity extends AppCompatActivity {
                       final Dialog delete = new Dialog(context);
                       delete.setTitle("삭제할까요?");
                       delete.setContentView(R.layout.delete);
+                      Button delBtn = (Button) delete.findViewById(R.id.delete);
+                      Button cancelBtn = (Button) delete.findViewById(R.id.cancel);
+      // 다이얼로그 삭제버튼 누를 때
+                      delBtn.setOnClickListener(new View.OnClickListener() {
+                          @Override
+                          public void onClick(View view) {
+
+                          }
+                      });
+       //다이얼로그 취소버튼 누를 때
+                      cancelBtn.setOnClickListener(new View.OnClickListener() {
+                          @Override
+                          public void onClick(View view) {
+
+                          }
+                      });
                       delete.show();
                       return true;
                   }
