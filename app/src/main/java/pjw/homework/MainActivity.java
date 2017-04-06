@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                                       }
                                   });
  //버튼 길게 눌렀을 때
-              btn[i].setOnLongClickListener(new View.OnLongClickListener(){
+          btn[i].setOnLongClickListener(new View.OnLongClickListener(){
 
                   @Override
                   public boolean onLongClick(View view) {
@@ -236,7 +236,9 @@ public class MainActivity extends AppCompatActivity {
                               SharedPreferences pref = getSharedPreferences("SaveState", MODE_PRIVATE);
                               pref.edit().remove(String.valueOf(activitynumber[btnnum])).commit();
                               restoreFromSavedState();
-                              layout.removeViews(btn[btnnum]);
+                              layout.removeView(btn[btnnum]);
+
+                              delete.dismiss();
                           }
                       });
        //다이얼로그 취소버튼 누를 때
