@@ -51,7 +51,11 @@ public class MainActivity extends AppCompatActivity {
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                SharedPreferences pref = getSharedPreferences("SaveState", MODE_PRIVATE);
+                pref.edit().clear().commit();
+                count = 0;
+                restoreFromSavedState();
+                layout.removeAllViews();
             }
         });
 //추가버튼 눌렀을때
@@ -121,9 +125,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
- //버튼 길게 눌렀을 때
-
-
 
  //저장상태 복구
         restoreFromSavedState();
@@ -216,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
                                                   Toast.LENGTH_SHORT).show();
                                       }
                                   });
+ //버튼 길게 눌렀을 때
               btn[i].setOnLongClickListener(new View.OnLongClickListener(){
 
                   @Override
@@ -230,14 +232,18 @@ public class MainActivity extends AppCompatActivity {
                       delBtn.setOnClickListener(new View.OnClickListener() {
                           @Override
                           public void onClick(View view) {
-
+                              int btnnum=i;
+                              SharedPreferences pref = getSharedPreferences("SaveState", MODE_PRIVATE);
+                              pref.edit().remove(String.valueOf(activitynumber[btnnum])).commit();
+                              restoreFromSavedState();
+                              layout.removeViews(btn[btnnum]);
                           }
                       });
        //다이얼로그 취소버튼 누를 때
                       cancelBtn.setOnClickListener(new View.OnClickListener() {
                           @Override
                           public void onClick(View view) {
-
+                        delete.dismiss();
                           }
                       });
                       delete.show();
