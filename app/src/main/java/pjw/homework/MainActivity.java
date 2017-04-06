@@ -139,14 +139,14 @@ public class MainActivity extends AppCompatActivity
 									Button delBtn = ( Button ) delete.findViewById( R.id.delete );
 									Button cancelBtn = ( Button ) delete.findViewById( R.id.cancel );
 									// 다이얼로그 삭제버튼 누를 때
-									delBtn.setTag( view );
+									delBtn.setTag( view );    //델버튼에 롱터치view 버튼 태그로 바꿔서 연결
 									delBtn.setOnClickListener( new View.OnClickListener()
 									{
 										@Override
 										public void onClick( View view )
 										{
-											View currBtn = ( View ) view.getTag();
-											int index = Arrays.asList( btn ).indexOf( currBtn );
+											View currBtn = ( View ) view.getTag(); //변수에 태그로 바꾼거 연결
+											int index = Arrays.asList( btn ).indexOf( currBtn );  //배열을 리스트로 만들어서 해당버튼의 번호 찾기
 											SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
 											pref.edit()
 													.remove( "actnum[" + index + "]" )
