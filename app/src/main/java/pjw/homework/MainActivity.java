@@ -2,6 +2,7 @@ package pjw.homework;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -114,8 +115,9 @@ public class MainActivity extends AppCompatActivity
 							activitynumber[count - 1] = count;
 							btn[count - 1] = new Button( context );
 							//btn.setText("버튼" + String.valueOf(count)); 원래 번호증가 버튼
-							btn[count - 1].setText( "" + subject[count - 1] );
+							btn[count - 1].setText( subject[count - 1] );
 							btn[count - 1].setId( count );
+
 							btn[count - 1].setOnClickListener( new View.OnClickListener()
 															   {
 																   @Override
@@ -123,6 +125,11 @@ public class MainActivity extends AppCompatActivity
 																   {
 																	   Toast.makeText( MainActivity.this, ( v.getId() ) + "액티비티호출",
 																			   Toast.LENGTH_SHORT ).show();
+
+																	   Intent intent = new Intent(MainActivity.this, SubActivity.class);
+																	   intent.putExtra("subName", subject[v.getId()-1]);
+																	   intent.putExtra("btnNum", studentnumber[v.getId()-1]);
+																	   startActivity(intent);
 																   }
 															   }
 
