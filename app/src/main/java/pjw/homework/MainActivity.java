@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
 						if( id != null && num != 0 )
 						{
 
-							Toast.makeText( MainActivity.this, "과제명" + id + "학생수" + num,
+							Toast.makeText( MainActivity.this, "과제명:  " + id + "  학생수:  " + num,
 									Toast.LENGTH_SHORT ).show();
 
 							subject[count - 1] = id;
