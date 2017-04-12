@@ -26,15 +26,7 @@ public class SubActivity extends AppCompatActivity {
 // linearLayout params 정의
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-
-
-
-
-
-
         int i;
-
-
         if (sNum > 4 ) {
 
             for (i = 0; i < sNum; i++) {
@@ -57,6 +49,7 @@ public class SubActivity extends AppCompatActivity {
                 final Button btn = new Button(this);
                 btn.setText("" + j);
                 btn.setId(j);
+                btn.setLayoutParams(params);
                 linear.addView(btn);
             }
 
