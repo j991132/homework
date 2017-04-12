@@ -27,17 +27,16 @@ public class SubActivity extends AppCompatActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
         int i;
+
         if (sNum > 4 ) {
 
             for (i = 0; i < sNum; i++) {
-                int j = i + 1;
-
                 LinearLayout ll = new LinearLayout(this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
                 final Button btn = new Button(this);
 
-                btn.setText("" + j);
-                btn.setId(j);
+                btn.setText("" + (i+1));
+                btn.setId((i+1));
                 btn.setLayoutParams(params);
                 ll.addView(btn);
                 linear.addView(ll);
@@ -45,15 +44,15 @@ public class SubActivity extends AppCompatActivity {
             }
         }else {
             for (i = 0; i < sNum; i++) {
-                int j = i + 1;
                 final Button btn = new Button(this);
-                btn.setText("" + j);
-                btn.setId(j);
+                btn.setText("" + (i+1));
+                btn.setId((i+1));
                 btn.setLayoutParams(params);
                 linear.addView(btn);
             }
 
         }
+
 
     }
 }
