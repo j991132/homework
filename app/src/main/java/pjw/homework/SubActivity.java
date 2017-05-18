@@ -27,32 +27,45 @@ public class SubActivity extends AppCompatActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
         int i;
+        int j;
+        int k = 0;
+        int l=0;
 
-        if (sNum > 4 ) {
-
+        if (sNum <= 4) {
+            LinearLayout ll = new LinearLayout(this);
+            ll.setOrientation(LinearLayout.HORIZONTAL);
             for (i = 0; i < sNum; i++) {
-                LinearLayout ll = new LinearLayout(this);
-                ll.setOrientation(LinearLayout.HORIZONTAL);
-                final Button btn = new Button(this);
 
-                btn.setText("" + (i+1));
-                btn.setId((i+1));
+                final Button btn = new Button(this);
+                btn.setText("" + (i + 1));
+                btn.setId((i + 1));
                 btn.setLayoutParams(params);
                 ll.addView(btn);
+            }
+            linear.addView(ll);
+        } else{
+
+            for (i = 0; i < Math.ceil((float)sNum / 4); i++) {
+                LinearLayout ll = new LinearLayout(this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+
+                for (j = k; j < k+4; j++) {
+                    final Button btn = new Button(this);
+                    btn.setText("" + (j + 1));
+                    btn.setId((j + 1));
+                    btn.setLayoutParams(params);
+                    if(l<sNum) {
+                        ll.addView(btn);
+                        l++;
+                    }
+                }
                 linear.addView(ll);
 
+                k = k + 4;
+
             }
-        }else {
-            for (i = 0; i < sNum; i++) {
-                final Button btn = new Button(this);
-                btn.setText("" + (i+1));
-                btn.setId((i+1));
-                btn.setLayoutParams(params);
-                linear.addView(btn);
-            }
+
 
         }
-
-
     }
 }
