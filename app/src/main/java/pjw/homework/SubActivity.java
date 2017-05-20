@@ -1,15 +1,17 @@
 package pjw.homework;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SubActivity extends AppCompatActivity {
-
+    int btnColor=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,7 @@ public class SubActivity extends AppCompatActivity {
         int k = 0;
         int l=0;
 
+
         if (sNum <= 4) {
             LinearLayout ll = new LinearLayout(this);
             ll.setOrientation(LinearLayout.HORIZONTAL);
@@ -40,6 +43,21 @@ public class SubActivity extends AppCompatActivity {
                 btn.setText("" + (i + 1));
                 btn.setId((i + 1));
                 btn.setLayoutParams(params);
+                btn.setBackgroundColor(Color.GREEN);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                       if ( btnColor == 0) {
+                           btn.setBackgroundColor(Color.RED);
+                           btnColor = 1;
+                       }else{
+                           btn.setBackgroundColor(Color.GREEN);
+                           btnColor=0;
+                       }
+                    }
+                });
+
                 ll.addView(btn);
             }
             linear.addView(ll);
@@ -54,6 +72,20 @@ public class SubActivity extends AppCompatActivity {
                     btn.setText("" + (j + 1));
                     btn.setId((j + 1));
                     btn.setLayoutParams(params);
+                    btn.setBackgroundColor(Color.GREEN);
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if ( btnColor == 0) {
+                                btn.setBackgroundColor(Color.RED);
+                                btnColor = 1;
+                            }else{
+                                btn.setBackgroundColor(Color.GREEN);
+                                btnColor=0;
+                            }
+                        }
+                    });
                     if(l<sNum) {
                         ll.addView(btn);
                         l++;
