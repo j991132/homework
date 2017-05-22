@@ -45,13 +45,13 @@ public class SubActivity extends AppCompatActivity {
             for (i = 0; i < sNum; i++) {
 
                 final ToggleButton btn = new ToggleButton(this);
-                btn.setText("" + (i + 1));
-                btn.setTextOn("" + (i + 1));
-                btn.setTextOff("" + (i + 1));
+                btn.setText("" + (i + 1)); //첫 텍스트 보이기
+                btn.setTextOn("" + (i + 1)); //토클온 텍스트
+                btn.setTextOff("" + (i + 1)); //토클오프 텍스트
                 btn.setId((i + 1));
                 btn.setLayoutParams(params);
                 btn.setBackgroundColor(Color.GREEN);
-
+//토클키 설정하기
                 btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -70,15 +70,15 @@ public class SubActivity extends AppCompatActivity {
             linear.addView(ll);
         } else{
 
-            for (i = 0; i < Math.ceil((float)sNum / 4); i++) {
+            for (i = 0; i < Math.ceil((float)sNum / 4); i++) { //소수이용 올림수 처리로 4개 이상시 레이어 추가
                 LinearLayout ll = new LinearLayout(this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
 
                 for (j = k; j < k+4; j++) {
                     final ToggleButton btn = new ToggleButton(this);
-                    btn.setText("" + (j + 1));
-                    btn.setTextOn("" + (j + 1));
-                    btn.setTextOff("" + (j + 1));
+                    btn.setText("" + (j + 1));  //첫 텍스트 보이기
+                    btn.setTextOn("" + (j + 1));  //토글온  텍스트
+                    btn.setTextOff("" + (j + 1)); //토클오프 텍스트
                     btn.setId((j + 1));
                     btn.setLayoutParams(params);
                     btn.setBackgroundColor(Color.GREEN);
