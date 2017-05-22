@@ -7,11 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import java.util.Arrays;
 
 public class SubActivity extends AppCompatActivity {
-    int btnColor=0;
+    int i;
+    int j;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,8 +33,8 @@ public class SubActivity extends AppCompatActivity {
 // linearLayout params 정의
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-        int i;
-        int j;
+
+
         int k = 0;
         int l=0;
 
@@ -39,25 +44,27 @@ public class SubActivity extends AppCompatActivity {
             ll.setOrientation(LinearLayout.HORIZONTAL);
             for (i = 0; i < sNum; i++) {
 
-                final Button btn = new Button(this);
+                final ToggleButton btn = new ToggleButton(this);
                 btn.setText("" + (i + 1));
+                btn.setTextOn("" + (i + 1));
+                btn.setTextOff("" + (i + 1));
                 btn.setId((i + 1));
                 btn.setLayoutParams(params);
                 btn.setBackgroundColor(Color.GREEN);
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
 
-                       if ( btnColor == 0) {
-                           btn.setBackgroundColor(Color.RED);
-                           btnColor = 1;
-                       }else{
-                           btn.setBackgroundColor(Color.GREEN);
-                           btnColor=0;
-                       }
+                btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        if (isChecked == true){
+                            //빨간색 표시
+                            btn.setBackgroundColor(Color.RED);
+                        } else {
+                           //녹색 표시
+                            btn.setBackgroundColor(Color.GREEN);
+                        }
                     }
                 });
-
                 ll.addView(btn);
             }
             linear.addView(ll);
@@ -68,22 +75,24 @@ public class SubActivity extends AppCompatActivity {
                 ll.setOrientation(LinearLayout.HORIZONTAL);
 
                 for (j = k; j < k+4; j++) {
-                    final Button btn = new Button(this);
+                    final ToggleButton btn = new ToggleButton(this);
                     btn.setText("" + (j + 1));
+                    btn.setTextOn("" + (j + 1));
+                    btn.setTextOff("" + (j + 1));
                     btn.setId((j + 1));
                     btn.setLayoutParams(params);
                     btn.setBackgroundColor(Color.GREEN);
-                    btn.setOnClickListener(new View.OnClickListener() {
+                    btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
-                        public void onClick(View view) {
-
-                            if ( btnColor == 0) {
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (isChecked == true){
+                                //빨간색 표시
                                 btn.setBackgroundColor(Color.RED);
-                                btnColor = 1;
-                            }else{
+                            } else {
+                                //녹색 표시
                                 btn.setBackgroundColor(Color.GREEN);
-                                btnColor=0;
                             }
+
                         }
                     });
                     if(l<sNum) {
