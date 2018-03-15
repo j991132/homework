@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity
 							//btn.setText("버튼" + String.valueOf(count)); 원래 번호증가 버튼
 							btn[count - 1].setText( subject[count - 1] );
 							btn[count - 1].setId( count );
-
+//각 버튼 눌렀을 때 액티비티 호출
 							btn[count - 1].setOnClickListener( new View.OnClickListener()
 															   {
 																   @Override
