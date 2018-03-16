@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity
 					@Override
 					public void onClick( View v )
 					{
+						saveCurrentState();
 						EditText editId = ( EditText ) ok.findViewById( R.id.edit_id );
 //과제명에 입력값이 없을때 구분하기(입력된 값의 길이로 비교)
 						if( editId.getText().toString().length() == 0 )
@@ -285,13 +286,16 @@ public class MainActivity extends AppCompatActivity
 		{
 			activitynumber[i] = pref.getInt( "actnum", activitynumber[i] );
 			subject[i] = pref.getString( "name[" + i + "]", subject[i] );
-			studentnumber[i] = pref.getInt( "studentnum", studentnumber[i] );
+			studentnumber[i] = pref.getInt( "studentnum["+i+"]", studentnumber[i] );
 
 		}
 	}
 
 	protected void addbtn()
+
 	{
+
+
 		if( count != 0 )
 		{
 
@@ -301,13 +305,17 @@ public class MainActivity extends AppCompatActivity
 				//btn.setText("버튼" + String.valueOf(count)); 원래 번호증가 버튼
 				btn[i].setText( "" + subject[i] );
 				btn[i].setId( i + 1 );
-				btn[i].setOnClickListener( new View.OnClickListener()
+                btn[i].setOnClickListener( new View.OnClickListener()
 				{
 					@Override
 					public void onClick( View v )
 					{
 						Toast.makeText( MainActivity.this, ( v.getId() ) + "액티비티호출",
 								Toast.LENGTH_SHORT ).show();
+						Intent intent = new Intent(MainActivity.this, SubActivity.class);
+						intent.putExtra("subName", subject[v.getId()-1]);
+						intent.putExtra("btnNum", studentnumber[v.getId()-1]);
+						startActivity(intent);
 					}
 				} );
 				//버튼 길게 눌렀을 때
@@ -365,6 +373,7 @@ public class MainActivity extends AppCompatActivity
 
 	}
 
+
 	// Back의 상태값을 저장하기 위한 변수
 	boolean m_close_flag = false;
 
@@ -392,7 +401,7 @@ public class MainActivity extends AppCompatActivity
 
 
 			// 안내 메세지를 토스트로 출력한다.
-			Toast.makeText( this, "취소키를 빨리 한번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG ).show();
+			Toast.makeText( this, "뒤로키를 빨리 한번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG ).show();
 
 
 			// 상태값 변경
@@ -410,12 +419,14 @@ public class MainActivity extends AppCompatActivity
 
 			// 액티비티를 종료하는 상위 클래스의 onBackPressed 메소드를 호출한다.
 			super.onBackPressed();
+
 		}
 	}
 
 
 	protected void onStop()
 	{
+
 		super.onStop();
 
 		// 핸드러에 등록된 0번 메세지를 모두 지운다.
