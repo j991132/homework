@@ -1,6 +1,7 @@
 package pjw.homework;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +13,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SubActivity extends AppCompatActivity {
     int i;
     int j;
+    int sNum;
+    ArrayList color;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +35,8 @@ public class SubActivity extends AppCompatActivity {
 //타이틀에 넘어온 id값 표시하기
         TextView title = (TextView) findViewById(R.id.subjectname);
         title.setText(subText);
+
+
 
         final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
 // linearLayout params 정의
@@ -49,6 +58,7 @@ public class SubActivity extends AppCompatActivity {
                 btn.setTextOn("" + (i + 1)); //토클온 텍스트
                 btn.setTextOff("" + (i + 1)); //토클오프 텍스트
                 btn.setId((i + 1));
+
                 btn.setLayoutParams(params);
                 btn.setBackgroundColor(Color.GREEN);
 //토클키 설정하기
@@ -56,13 +66,18 @@ public class SubActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                         color = new ArrayList();
+
                         if (isChecked == true){
                             //빨간색 표시
                             btn.setBackgroundColor(Color.RED);
+                            color.add(buttonView.getId(),"RED");
                         } else {
                            //녹색 표시
                             btn.setBackgroundColor(Color.GREEN);
+                            color.add(buttonView.getId(),"GREEN");
                         }
+
                     }
                 });
                 ll.addView(btn);
@@ -106,6 +121,43 @@ public class SubActivity extends AppCompatActivity {
 
             }
 
+
+        }
+    }
+ //상태저장 매서드
+    protected void saveCurrentState()
+    {
+        SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
+        SharedPreferences.Editor edit = pref.edit();
+
+        JSONArray array = new JSONArray();
+        for (i=0; i < color.size(); i++)
+        {
+            array.put(color.get(i));
+        }
+        edit.putString("ToggleColor", array.toString());
+        edit.commit();
+    }
+//상태복구 매서드
+    protected void restoreFromSavedState() {
+        SharedPreferences pref = getSharedPreferences("SaveState", MODE_PRIVATE);
+
+        String json = pref.getString("ToggleColor", null);
+        if (json != null) {
+            try {
+                JSONArray array = new JSONArray(json);
+                color.clear();
+
+                for (i = 0; i < array.length(); i++) {
+                    String url = array.optString(i);
+                    color.add(url);
+                }
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+        }
+    }
+    else {
 
         }
     }
