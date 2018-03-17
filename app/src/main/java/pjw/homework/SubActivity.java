@@ -28,7 +28,7 @@ import java.util.HashMap;
 public class SubActivity extends AppCompatActivity {
     int i;
     int j;
-    int sNum;
+    int sNum, count;
     String key;
 
     HashMap<Integer, Integer> color, value;
@@ -57,6 +57,7 @@ public class SubActivity extends AppCompatActivity {
 
 
         if (sNum <= 4) {
+            count++;
             LinearLayout ll = new LinearLayout(this);
             ll.setOrientation(LinearLayout.HORIZONTAL);
             for (i = 0; i < sNum; i++) {
@@ -198,58 +199,57 @@ public class SubActivity extends AppCompatActivity {
 
 
 // 복구시 버튼 재 배치
-    protected void addbtn()
-    {
-        final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        if (sNum <= 4) {
-            LinearLayout ll = new LinearLayout(this);
-            ll.setOrientation(LinearLayout.HORIZONTAL);
-            for (i = 0; i < sNum; i++) {
+    protected void addbtn() {
+        if (count != 0) {
+            final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            if (sNum <= 4) {
+                LinearLayout ll = new LinearLayout(this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                for (i = 0; i < sNum; i++) {
 
-                final ToggleButton btn = new ToggleButton(this);
-                btn.setText("" + (i + 1)); //첫 텍스트 보이기
-                btn.setTextOn("" + (i + 1)); //토클온 텍스트
-                btn.setTextOff("" + (i + 1)); //토클오프 텍스트
-                btn.setId((i + 1));
+                    final ToggleButton btn = new ToggleButton(this);
+                    btn.setText("" + (i + 1)); //첫 텍스트 보이기
+                    btn.setTextOn("" + (i + 1)); //토클온 텍스트
+                    btn.setTextOff("" + (i + 1)); //토클오프 텍스트
+                    btn.setId((i + 1));
 
-                btn.setLayoutParams(params);
-                if (value.get(i) == 1) {
-                    //빨간색 표시
+                    btn.setLayoutParams(params);
+                    if (value.get(i) == 1) {
+                        //빨간색 표시
 
-                    btn.setBackgroundColor(Color.RED);
+                        btn.setBackgroundColor(Color.RED);
 
-                } else {
-                    //녹색 표시
+                    } else {
+                        //녹색 표시
 
-                    btn.setBackgroundColor(Color.GREEN);
-
-                }
-//토클키 설정하기
-                btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
-
-                        
-                        if (color.get(buttonView.getId()) == 1) {
-                            //빨간색 표시
-
-                            btn.setBackgroundColor(Color.RED);
-
-                        } else {
-                            //녹색 표시
-
-                            btn.setBackgroundColor(Color.GREEN);
-
-                        }
+                        btn.setBackgroundColor(Color.GREEN);
 
                     }
-                });
-                ll.addView(btn);
+//토클키 설정하기
+                    btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                            if (color.get(buttonView.getId()) == 1) {
+                                //빨간색 표시
+
+                                btn.setBackgroundColor(Color.RED);
+
+                            } else {
+                                //녹색 표시
+
+                                btn.setBackgroundColor(Color.GREEN);
+
+                            }
+
+                        }
+                    });
+                    ll.addView(btn);
+                }
+                linear.addView(ll);
             }
-            linear.addView(ll);
         }
     }
 }
