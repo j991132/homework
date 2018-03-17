@@ -3,6 +3,7 @@ package pjw.homework;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,17 +14,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class SubActivity extends AppCompatActivity {
     int i;
     int j;
     int sNum;
-    ArrayList color;
+    String key, value;
+
+    HashMap<Integer, String> color;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,16 +74,29 @@ public class SubActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                         color = new ArrayList();
+                         color = new HashMap<Integer, String>();
 
                         if (isChecked == true){
                             //빨간색 표시
-                            btn.setBackgroundColor(Color.RED);
-                            color.add(buttonView.getId(),"RED");
+
+                            color.put(buttonView.getId(),"RED");
+
                         } else {
                            //녹색 표시
+
+                            color.put(buttonView.getId(),"GREEN");
+
+                        }
+                        if (color.get(buttonView.getId()) == "RED"){
+                            //빨간색 표시
+
+                            btn.setBackgroundColor(Color.RED);
+
+                        } else {
+                            //녹색 표시
+
                             btn.setBackgroundColor(Color.GREEN);
-                            color.add(buttonView.getId(),"GREEN");
+
                         }
 
                     }
@@ -123,42 +144,111 @@ public class SubActivity extends AppCompatActivity {
 
 
         }
+        getHashMap(key);
+        addbtn();
     }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        // 추가로 자료를 복원하는 코드는 여기에 작성하세요.
+        saveHashMap();
+    }
+
  //상태저장 매서드
-    protected void saveCurrentState()
+    protected void saveHashMap()
     {
         SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
-        SharedPreferences.Editor edit = pref.edit();
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson (color);
+        editor.putString (key, json);
+        editor.putInt( "studentnum", sNum);
+        editor.apply ();
 
-        JSONArray array = new JSONArray();
-        for (i=0; i < color.size(); i++)
-        {
-            array.put(color.get(i));
-        }
-        edit.putString("ToggleColor", array.toString());
-        edit.commit();
+
+
     }
+
 //상태복구 매서드
-    protected void restoreFromSavedState() {
-        SharedPreferences pref = getSharedPreferences("SaveState", MODE_PRIVATE);
 
-        String json = pref.getString("ToggleColor", null);
-        if (json != null) {
-            try {
-                JSONArray array = new JSONArray(json);
-                color.clear();
-
-                for (i = 0; i < array.length(); i++) {
-                    String url = array.optString(i);
-                    color.add(url);
-                }
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
+    public HashMap<Integer,String> getHashMap(String key) {
+        SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
+        sNum = pref.getInt( "studentnum", sNum );
+        Gson gson = new Gson();
+        String json = pref.getString(key,"");
+        java.lang.reflect.Type type = new TypeToken<HashMap<Integer,String>>(){}.getType();
+        HashMap<Integer,String> value = gson.fromJson(json, type);
+        return value;
         }
-    }
-    else {
 
+
+
+// 복구시 버튼 재 배치
+    protected void addbtn()
+    {
+        final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        if (sNum <= 4) {
+            LinearLayout ll = new LinearLayout(this);
+            ll.setOrientation(LinearLayout.HORIZONTAL);
+            for (i = 0; i < sNum; i++) {
+
+                final ToggleButton btn = new ToggleButton(this);
+                btn.setText("" + (i + 1)); //첫 텍스트 보이기
+                btn.setTextOn("" + (i + 1)); //토클온 텍스트
+                btn.setTextOff("" + (i + 1)); //토클오프 텍스트
+                btn.setId((i + 1));
+
+                btn.setLayoutParams(params);
+                if (color.get(btn.getId()) == "RED") {
+                    //빨간색 표시
+
+                    btn.setBackgroundColor(Color.RED);
+
+                } else {
+                    //녹색 표시
+
+                    btn.setBackgroundColor(Color.GREEN);
+
+                }
+//토클키 설정하기
+                btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+
+                        if (isChecked == true) {
+                            //빨간색 표시
+
+                            color.put(buttonView.getId(), "RED");
+
+                        } else {
+                            //녹색 표시
+
+                            color.put(buttonView.getId(), "GREEN");
+
+                        }
+                        if (color.get(buttonView.getId()) == "RED") {
+                            //빨간색 표시
+
+                            btn.setBackgroundColor(Color.RED);
+
+                        } else {
+                            //녹색 표시
+
+                            btn.setBackgroundColor(Color.GREEN);
+
+                        }
+
+                    }
+                });
+                ll.addView(btn);
+            }
+            linear.addView(ll);
         }
     }
 }
