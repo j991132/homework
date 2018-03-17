@@ -29,9 +29,9 @@ public class SubActivity extends AppCompatActivity {
     int i;
     int j;
     int sNum;
-    String key, value;
+    String key;
 
-    HashMap<Integer, String> color;
+    HashMap<Integer, Integer> color, value;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,20 +74,20 @@ public class SubActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                         color = new HashMap<Integer, String>();
+                         color = new HashMap<Integer, Integer>();
 
                         if (isChecked == true){
                             //빨간색 표시
 
-                            color.put(buttonView.getId(),"RED");
+                            color.put(buttonView.getId(),1);
 
                         } else {
                            //녹색 표시
 
-                            color.put(buttonView.getId(),"GREEN");
+                            color.put(buttonView.getId(),2);
 
                         }
-                        if (color.get(buttonView.getId()) == "RED"){
+                        if (color.get(buttonView.getId()) == 1){
                             //빨간색 표시
 
                             btn.setBackgroundColor(Color.RED);
@@ -144,7 +144,7 @@ public class SubActivity extends AppCompatActivity {
 
 
         }
-        getHashMap(key);
+        getHashMap();
         addbtn();
     }
 
@@ -162,11 +162,16 @@ public class SubActivity extends AppCompatActivity {
     {
         SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
         SharedPreferences.Editor editor = pref.edit();
+        editor.putInt( "studentnum", sNum);
+/*        for   ( int s : color.keySet ())   {
+            editor . putInt(String.valueOf(s), color. get ( s ));
+        } editor . commit ();
+*/
         Gson gson = new Gson();
         String json = gson.toJson (color);
         editor.putString (key, json);
         editor.putInt( "studentnum", sNum);
-        editor.apply ();
+        editor.apply();
 
 
 
@@ -174,14 +179,20 @@ public class SubActivity extends AppCompatActivity {
 
 //상태복구 매서드
 
-    public HashMap<Integer,String> getHashMap(String key) {
-        SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
+    public HashMap<Integer,Integer> getHashMap() {
+       SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
         sNum = pref.getInt( "studentnum", sNum );
-        Gson gson = new Gson();
+/*
+        HashMap<Integer, Integer> map =    (HashMap <Integer, Integer>) pref . getAll ();
+        for   ( Integer s : map . keySet ())   {
+            Integer value = map . get ( s );
+*/
+       Gson gson = new Gson();
         String json = pref.getString(key,"");
         java.lang.reflect.Type type = new TypeToken<HashMap<Integer,String>>(){}.getType();
-        HashMap<Integer,String> value = gson.fromJson(json, type);
+        HashMap<Integer,Integer> value = gson.fromJson(json, type);
         return value;
+
         }
 
 
@@ -203,7 +214,7 @@ public class SubActivity extends AppCompatActivity {
                 btn.setId((i + 1));
 
                 btn.setLayoutParams(params);
-                if (color.get(btn.getId()) == "RED") {
+                if (value.get(i) == 1) {
                     //빨간색 표시
 
                     btn.setBackgroundColor(Color.RED);
@@ -221,18 +232,8 @@ public class SubActivity extends AppCompatActivity {
 
 
 
-                        if (isChecked == true) {
-                            //빨간색 표시
-
-                            color.put(buttonView.getId(), "RED");
-
-                        } else {
-                            //녹색 표시
-
-                            color.put(buttonView.getId(), "GREEN");
-
-                        }
-                        if (color.get(buttonView.getId()) == "RED") {
+                        
+                        if (color.get(buttonView.getId()) == 1) {
                             //빨간색 표시
 
                             btn.setBackgroundColor(Color.RED);
