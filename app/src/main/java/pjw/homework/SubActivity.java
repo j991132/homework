@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -19,19 +20,20 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SubActivity extends AppCompatActivity {
     int i;
     int j;
-    int sNum, count;
+    int sNum ;
     String key;
-
-    HashMap<Integer, Integer> color, value;
+        HashMap<Integer, Integer> color, value;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,18 +48,18 @@ public class SubActivity extends AppCompatActivity {
 
 
 
+
         final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
 // linearLayout params 정의
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 
-
         int k = 0;
-        int l=0;
+        int l = 0;
 
 
         if (sNum <= 4) {
-            count++;
+
             LinearLayout ll = new LinearLayout(this);
             ll.setOrientation(LinearLayout.HORIZONTAL);
             for (i = 0; i < sNum; i++) {
@@ -75,20 +77,20 @@ public class SubActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                         color = new HashMap<Integer, Integer>();
+                        color = new HashMap<Integer, Integer>();
 
-                        if (isChecked == true){
+                        if (isChecked == true) {
                             //빨간색 표시
 
-                            color.put(buttonView.getId(),1);
+                            color.put(buttonView.getId(), 1);
 
                         } else {
-                           //녹색 표시
+                            //녹색 표시
 
-                            color.put(buttonView.getId(),2);
+                            color.put(buttonView.getId(), 2);
 
                         }
-                        if (color.get(buttonView.getId()) == 1){
+                        if (color.get(buttonView.getId()) == 1) {
                             //빨간색 표시
 
                             btn.setBackgroundColor(Color.RED);
@@ -105,13 +107,13 @@ public class SubActivity extends AppCompatActivity {
                 ll.addView(btn);
             }
             linear.addView(ll);
-        } else{
+        } else {
 
-            for (i = 0; i < Math.ceil((float)sNum / 4); i++) { //소수이용 올림수 처리로 4개 이상시 레이어 추가
+            for (i = 0; i < Math.ceil((float) sNum / 4); i++) { //소수이용 올림수 처리로 4개 이상시 레이어 추가
                 LinearLayout ll = new LinearLayout(this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
 
-                for (j = k; j < k+4; j++) {
+                for (j = k; j < k + 4; j++) {
                     final ToggleButton btn = new ToggleButton(this);
                     btn.setText("" + (j + 1));  //첫 텍스트 보이기
                     btn.setTextOn("" + (j + 1));  //토글온  텍스트
@@ -122,7 +124,7 @@ public class SubActivity extends AppCompatActivity {
                     btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (isChecked == true){
+                            if (isChecked == true) {
                                 //빨간색 표시
                                 btn.setBackgroundColor(Color.RED);
                             } else {
@@ -132,7 +134,7 @@ public class SubActivity extends AppCompatActivity {
 
                         }
                     });
-                    if(l<sNum) {
+                    if (l < sNum) {
                         ll.addView(btn);
                         l++;
                     }
@@ -145,8 +147,11 @@ public class SubActivity extends AppCompatActivity {
 
 
         }
-        getHashMap();
+
+
+        getHashMap(key);
         addbtn();
+        //Log.d("TAG", "11111111111111111111111111111"+value.get(1));
     }
 
     @Override
@@ -154,16 +159,17 @@ public class SubActivity extends AppCompatActivity {
     {
         super.onPause();
 
-        // 추가로 자료를 복원하는 코드는 여기에 작성하세요.
-        saveHashMap();
+
+        saveHashMap(key, color);
     }
 
  //상태저장 매서드
-    protected void saveHashMap()
+    protected void saveHashMap(String key, Map color )
     {
         SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt( "studentnum", sNum);
+
 /*        for   ( int s : color.keySet ())   {
             editor . putInt(String.valueOf(s), color. get ( s ));
         } editor . commit ();
@@ -180,19 +186,23 @@ public class SubActivity extends AppCompatActivity {
 
 //상태복구 매서드
 
-    public HashMap<Integer,Integer> getHashMap() {
+    public HashMap<Integer,Integer> getHashMap(String key) {
        SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
         sNum = pref.getInt( "studentnum", sNum );
+
 /*
         HashMap<Integer, Integer> map =    (HashMap <Integer, Integer>) pref . getAll ();
         for   ( Integer s : map . keySet ())   {
             Integer value = map . get ( s );
 */
        Gson gson = new Gson();
-        String json = pref.getString(key,"");
+        String json = pref.getString(key,(new JSONObject()).toString());
         java.lang.reflect.Type type = new TypeToken<HashMap<Integer,String>>(){}.getType();
-        HashMap<Integer,Integer> value = gson.fromJson(json, type);
+        value = new HashMap<Integer, Integer>();
+        value =  gson.fromJson(json, type);
         return value;
+
+
 
         }
 
@@ -200,7 +210,7 @@ public class SubActivity extends AppCompatActivity {
 
 // 복구시 버튼 재 배치
     protected void addbtn() {
-        if (count != 0) {
+
             final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             if (sNum <= 4) {
@@ -209,9 +219,9 @@ public class SubActivity extends AppCompatActivity {
                 for (i = 0; i < sNum; i++) {
 
                     final ToggleButton btn = new ToggleButton(this);
-                    btn.setText("" + (i + 1)); //첫 텍스트 보이기
-                    btn.setTextOn("" + (i + 1)); //토클온 텍스트
-                    btn.setTextOff("" + (i + 1)); //토클오프 텍스트
+                    btn.setText("2-" + (i + 1)); //첫 텍스트 보이기
+                    btn.setTextOn("2-" + (i + 1)); //토클온 텍스트
+                    btn.setTextOff("2-" + (i + 1)); //토클오프 텍스트
                     btn.setId((i + 1));
 
                     btn.setLayoutParams(params);
@@ -251,5 +261,5 @@ public class SubActivity extends AppCompatActivity {
                 linear.addView(ll);
             }
         }
-    }
+
 }
