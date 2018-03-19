@@ -44,7 +44,8 @@ public class SubActivity extends AppCompatActivity {
 //인텐트 넘어온 값 저장
         Intent intent = getIntent();
         String subText = intent.getStringExtra("subName");
-        int sNum = intent.getIntExtra("btnNum", 0);
+        sNum = intent.getIntExtra("btnNum", 0);
+
 //타이틀에 넘어온 id값 표시하기
         TextView title = (TextView) findViewById(R.id.subjectname);
         title.setText(subText);
@@ -59,8 +60,8 @@ public class SubActivity extends AppCompatActivity {
 
         int k = 0;
         int l = 0;
-
-
+        Log.d("TAG", "받아온 sNum"+sNum);
+        color = new HashMap<Integer, Integer>();
         if (sNum <= 4) {
 
             LinearLayout ll = new LinearLayout(this);
@@ -80,7 +81,7 @@ public class SubActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                        color = new HashMap<Integer, Integer>();
+
 
                         if (isChecked == true) {
                             //빨간색 표시
@@ -153,9 +154,13 @@ public class SubActivity extends AppCompatActivity {
 
 
         getHashMap(key);
-        Log.d("TAG", "11111111111111111111111111111");
-            addbtn();
 
+        Log.d("TAG", "복구시 해시맵");
+        System.out.println(value);
+        if (value != null) {
+            System.out.println(value);
+            addbtn();
+        }
 
     }
 
@@ -166,6 +171,8 @@ public class SubActivity extends AppCompatActivity {
 
 
         saveHashMap(key, color);
+        Log.d("TAG", "저장시 해시맵");
+        System.out.println(color);
     }
 
  //상태저장 매서드
@@ -173,16 +180,17 @@ public class SubActivity extends AppCompatActivity {
     {
         SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt( "studentnum", sNum);
-
+        //editor.putInt( "studentnum", sNum);
+        Log.d("TAG", "저장시 sNum"+sNum);
 /*        for   ( int s : color.keySet ())   {
             editor . putInt(String.valueOf(s), color. get ( s ));
         } editor . commit ();
 */
         Gson gson = new Gson();
         String json = gson.toJson (color);
+        Log.d("TAG", "저장 json 이후"+json);
         editor.putString (key, json);
-        editor.putInt( "studentnum", sNum);
+
         editor.apply();
 
 
@@ -193,7 +201,7 @@ public class SubActivity extends AppCompatActivity {
 
     public HashMap<Integer,Integer> getHashMap(String key) {
        SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
-        sNum = pref.getInt( "studentnum", sNum );
+        //sNum = pref.getInt( "studentnum", sNum );
 
 /*
         HashMap<Integer, Integer> map =    (HashMap <Integer, Integer>) pref . getAll ();
@@ -202,8 +210,8 @@ public class SubActivity extends AppCompatActivity {
 */
        Gson gson = new Gson();
         String json = pref.getString(key,(new JSONObject()).toString());
-        Log.d("TAG", "String json = pref.getString이후"+value.get(1));
-        java.lang.reflect.Type type = new TypeToken<HashMap<Integer,String>>(){}.getType();
+        Log.d("TAG", "복구 json 이후"+json);
+        java.lang.reflect.Type type = new TypeToken<HashMap<Integer,Integer>>(){}.getType();
         value = new HashMap<Integer, Integer>();
         value =  gson.fromJson(json, type);
         return value;
@@ -216,18 +224,23 @@ public class SubActivity extends AppCompatActivity {
 
 // 복구시 버튼 재 배치
     protected void addbtn() {
-        Log.d("TAG", "aaaaaaaaaaaaaaaaaaaaaaaa"+value.get(1));
-        final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
+
+
+            final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            Log.d("TAG", "aaaaaaaaaaaaaaaaaaaaaaaa");
             if (sNum <= 4) {
                 LinearLayout ll = new LinearLayout(this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
+                Log.d("TAG", "bbbbbbbbbbbbbbbbbbbbbbbbbbb" + sNum);
                 for (i = 0; i < sNum; i++) {
-
+                    Log.d("TAG", "cccccccccccccccccccccccc");
                     final ToggleButton btn = new ToggleButton(this);
+                    Log.d("TAG", "dddddddddddddddddddd");
                     btn.setText("2-" + (i + 1)); //첫 텍스트 보이기
                     btn.setTextOn("2-" + (i + 1)); //토클온 텍스트
                     btn.setTextOff("2-" + (i + 1)); //토클오프 텍스트
+
                     btn.setId((i + 1));
 
                     btn.setLayoutParams(params);
@@ -267,5 +280,6 @@ public class SubActivity extends AppCompatActivity {
                 linear.addView(ll);
             }
         }
+
 
 }
