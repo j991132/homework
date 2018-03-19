@@ -33,7 +33,10 @@ public class SubActivity extends AppCompatActivity {
     int j;
     int sNum ;
     String key;
+
         HashMap<Integer, Integer> color, value;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +51,8 @@ public class SubActivity extends AppCompatActivity {
 
 
 
-
         final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
+
 // linearLayout params 정의
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
@@ -150,8 +153,10 @@ public class SubActivity extends AppCompatActivity {
 
 
         getHashMap(key);
-        addbtn();
-        //Log.d("TAG", "11111111111111111111111111111"+value.get(1));
+        Log.d("TAG", "11111111111111111111111111111");
+            addbtn();
+
+
     }
 
     @Override
@@ -197,6 +202,7 @@ public class SubActivity extends AppCompatActivity {
 */
        Gson gson = new Gson();
         String json = pref.getString(key,(new JSONObject()).toString());
+        Log.d("TAG", "String json = pref.getString이후"+value.get(1));
         java.lang.reflect.Type type = new TypeToken<HashMap<Integer,String>>(){}.getType();
         value = new HashMap<Integer, Integer>();
         value =  gson.fromJson(json, type);
@@ -210,8 +216,8 @@ public class SubActivity extends AppCompatActivity {
 
 // 복구시 버튼 재 배치
     protected void addbtn() {
-
-            final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
+        Log.d("TAG", "aaaaaaaaaaaaaaaaaaaaaaaa"+value.get(1));
+        final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             if (sNum <= 4) {
                 LinearLayout ll = new LinearLayout(this);
