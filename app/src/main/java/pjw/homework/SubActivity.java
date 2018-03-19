@@ -49,7 +49,7 @@ public class SubActivity extends AppCompatActivity {
 //타이틀에 넘어온 id값 표시하기
         TextView title = (TextView) findViewById(R.id.subjectname);
         title.setText(subText);
-
+        color = new HashMap<Integer, Integer>();
 
 
         final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
@@ -60,8 +60,8 @@ public class SubActivity extends AppCompatActivity {
 
         int k = 0;
         int l = 0;
-        Log.d("TAG", "받아온 sNum"+sNum);
-        color = new HashMap<Integer, Integer>();
+
+
         if (sNum <= 4) {
 
             LinearLayout ll = new LinearLayout(this);
@@ -73,8 +73,10 @@ public class SubActivity extends AppCompatActivity {
                 btn.setTextOn("" + (i + 1)); //토클온 텍스트
                 btn.setTextOff("" + (i + 1)); //토클오프 텍스트
                 btn.setId((i + 1));
-
+                Log.d("TAG", "버튼번호"+btn.getId());
                 btn.setLayoutParams(params);
+                color.put(btn.getId(), 2);
+
                 btn.setBackgroundColor(Color.GREEN);
 //토클키 설정하기
                 btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -157,11 +159,13 @@ public class SubActivity extends AppCompatActivity {
 
         Log.d("TAG", "복구시 해시맵");
         System.out.println(value);
-        if (value != null) {
-            System.out.println(value);
-            addbtn();
+        if( value == null) {System.out.println("value is null");}
+        if (value !=null) {
+            if (value.isEmpty() == false) {
+                System.out.println(value);
+                addbtn();
+            }
         }
-
     }
 
     @Override
@@ -224,8 +228,8 @@ public class SubActivity extends AppCompatActivity {
 
 // 복구시 버튼 재 배치
     protected void addbtn() {
-
-
+        Log.d("TAG", "addbtn 이후 value");
+        System.out.println(value);
             final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             Log.d("TAG", "aaaaaaaaaaaaaaaaaaaaaaaa");
@@ -238,13 +242,14 @@ public class SubActivity extends AppCompatActivity {
                     final ToggleButton btn = new ToggleButton(this);
                     Log.d("TAG", "dddddddddddddddddddd");
                     btn.setText("2-" + (i + 1)); //첫 텍스트 보이기
+                    Log.d("TAG", "deeeeeeeeeeeeeeeeeee");
                     btn.setTextOn("2-" + (i + 1)); //토클온 텍스트
                     btn.setTextOff("2-" + (i + 1)); //토클오프 텍스트
 
                     btn.setId((i + 1));
 
                     btn.setLayoutParams(params);
-                    if (value.get(i) == 1) {
+                    if (value.get(btn.getId()) == 1) {
                         //빨간색 표시
 
                         btn.setBackgroundColor(Color.RED);
