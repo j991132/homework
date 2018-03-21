@@ -29,14 +29,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SubActivity extends AppCompatActivity {
-    int i;
-    int j;
-    int sNum ;
+    int i, j, k, l;
+    int sNum, aNum ;
     String key;
+    HashMap<Integer, Integer> color, value;
 
-        HashMap<Integer, Integer> color, value;
-
-
+    LinearLayout linear, ll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +43,7 @@ public class SubActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String subText = intent.getStringExtra("subName");
         sNum = intent.getIntExtra("btnNum", 0);
+        aNum = intent.getIntExtra("actNum", 0);
 
 //타이틀에 넘어온 id값 표시하기
         TextView title = (TextView) findViewById(R.id.subjectname);
@@ -52,19 +51,19 @@ public class SubActivity extends AppCompatActivity {
         color = new HashMap<Integer, Integer>();
 
 
-        final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
+        linear = (LinearLayout) findViewById(R.id.btnLayout);
 
 // linearLayout params 정의
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 
-        int k = 0;
-        int l = 0;
+        k = 0;
+        l = 0;
 
 
         if (sNum <= 4) {
 
-            LinearLayout ll = new LinearLayout(this);
+            ll = new LinearLayout(this);
             ll.setOrientation(LinearLayout.HORIZONTAL);
             for (i = 0; i < sNum; i++) {
 
@@ -73,7 +72,7 @@ public class SubActivity extends AppCompatActivity {
                 btn.setTextOn("" + (i + 1)); //토클온 텍스트
                 btn.setTextOff("" + (i + 1)); //토클오프 텍스트
                 btn.setId((i + 1));
-                Log.d("TAG", "버튼번호"+btn.getId());
+
                 btn.setLayoutParams(params);
                 color.put(btn.getId(), 2);
 
@@ -88,15 +87,15 @@ public class SubActivity extends AppCompatActivity {
                         if (isChecked == true) {
                             //빨간색 표시
 
-                            color.put(buttonView.getId(), 1);
+                            color.put(btn.getId(), 1);
 
                         } else {
                             //녹색 표시
 
-                            color.put(buttonView.getId(), 2);
+                            color.put(btn.getId(), 2);
 
                         }
-                        if (color.get(buttonView.getId()) == 1) {
+                        if (color.get(btn.getId()) == 1) {
                             //빨간색 표시
 
                             btn.setBackgroundColor(Color.RED);
@@ -126,16 +125,32 @@ public class SubActivity extends AppCompatActivity {
                     btn.setTextOff("" + (j + 1)); //토클오프 텍스트
                     btn.setId((j + 1));
                     btn.setLayoutParams(params);
+                    color.put(btn.getId(), 2);
                     btn.setBackgroundColor(Color.GREEN);
                     btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             if (isChecked == true) {
                                 //빨간색 표시
-                                btn.setBackgroundColor(Color.RED);
+
+                                color.put(btn.getId(), 1);
+
                             } else {
                                 //녹색 표시
+
+                                color.put(btn.getId(), 2);
+
+                            }
+                            if (color.get(btn.getId()) == 1) {
+                                //빨간색 표시
+
+                                btn.setBackgroundColor(Color.RED);
+
+                            } else {
+                                //녹색 표시
+
                                 btn.setBackgroundColor(Color.GREEN);
+
                             }
 
                         }
@@ -162,6 +177,7 @@ public class SubActivity extends AppCompatActivity {
         if( value == null) {System.out.println("value is null");}
         if (value !=null) {
             if (value.isEmpty() == false) {
+
                 System.out.println(value);
                 addbtn();
             }
@@ -227,24 +243,26 @@ public class SubActivity extends AppCompatActivity {
 
 
 // 복구시 버튼 재 배치
-    protected void addbtn() {
+   protected void addbtn() {
+        linear.removeAllViews();
         Log.d("TAG", "addbtn 이후 value");
         System.out.println(value);
-            final LinearLayout linear = (LinearLayout) findViewById(R.id.btnLayout);
+            linear = (LinearLayout) findViewById(R.id.btnLayout);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            Log.d("TAG", "aaaaaaaaaaaaaaaaaaaaaaaa");
+            k=0;
+            l=0;
             if (sNum <= 4) {
-                LinearLayout ll = new LinearLayout(this);
+                ll = new LinearLayout(this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
-                Log.d("TAG", "bbbbbbbbbbbbbbbbbbbbbbbbbbb" + sNum);
+
                 for (i = 0; i < sNum; i++) {
-                    Log.d("TAG", "cccccccccccccccccccccccc");
+
                     final ToggleButton btn = new ToggleButton(this);
-                    Log.d("TAG", "dddddddddddddddddddd");
-                    btn.setText("2-" + (i + 1)); //첫 텍스트 보이기
-                    Log.d("TAG", "deeeeeeeeeeeeeeeeeee");
-                    btn.setTextOn("2-" + (i + 1)); //토클온 텍스트
-                    btn.setTextOff("2-" + (i + 1)); //토클오프 텍스트
+
+                    btn.setText("" + (i + 1)); //첫 텍스트 보이기
+
+                    btn.setTextOn("" + (i + 1)); //토클온 텍스트
+                    btn.setTextOff("" + (i + 1)); //토클오프 텍스트
 
                     btn.setId((i + 1));
 
@@ -253,12 +271,12 @@ public class SubActivity extends AppCompatActivity {
                         //빨간색 표시
 
                         btn.setBackgroundColor(Color.RED);
-
+                        color.put(btn.getId(), 1);
                     } else {
                         //녹색 표시
 
                         btn.setBackgroundColor(Color.GREEN);
-
+                        color.put(btn.getId(), 2);
                     }
 //토클키 설정하기
                     btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -266,16 +284,16 @@ public class SubActivity extends AppCompatActivity {
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 
-                            if (color.get(buttonView.getId()) == 1) {
+                            if (color.get(btn.getId()) == 1) {
                                 //빨간색 표시
 
-                                btn.setBackgroundColor(Color.RED);
-
+                                btn.setBackgroundColor(Color.GREEN);
+                                color.put(btn.getId(), 2);
                             } else {
                                 //녹색 표시
 
-                                btn.setBackgroundColor(Color.GREEN);
-
+                                btn.setBackgroundColor(Color.RED);
+                                color.put(btn.getId(), 1);
                             }
 
                         }
@@ -283,8 +301,65 @@ public class SubActivity extends AppCompatActivity {
                     ll.addView(btn);
                 }
                 linear.addView(ll);
+            }else {
+                Log.d("TAG", "addbtn 4이상일때  value");
+                System.out.println(value);
+                for (i = 0; i < Math.ceil((float) sNum / 4); i++) { //소수이용 올림수 처리로 4개 이상시 레이어 추가
+                    ll = new LinearLayout(this);
+                    ll.setOrientation(LinearLayout.HORIZONTAL);
+
+                    for (j = k; j < k + 4; j++) {
+                        final ToggleButton btn = new ToggleButton(this);
+                        btn.setText("" + (j + 1));  //첫 텍스트 보이기
+                        btn.setTextOn("" + (j + 1));  //토글온  텍스트
+                        btn.setTextOff("" + (j + 1)); //토클오프 텍스트
+                        btn.setId((j + 1));
+                        btn.setLayoutParams(params);
+                        Log.d("TAG", "버튼 텍스트값"+btn.getId());
+                        if (value.get(btn.getId()) == 1) {
+                            //빨간색 표시
+
+                            btn.setBackgroundColor(Color.RED);
+                            color.put(btn.getId(), 1);
+                        } else {
+                            //녹색 표시
+
+                            btn.setBackgroundColor(Color.GREEN);
+                            color.put(btn.getId(), 2);
+                        }
+                        btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if (color.get(btn.getId()) == 1) {
+                                    //빨간색 표시
+
+                                    btn.setBackgroundColor(Color.GREEN);
+                                    color.put(btn.getId(), 2);
+                                } else {
+                                    //녹색 표시
+
+                                    btn.setBackgroundColor(Color.RED);
+                                    color.put(btn.getId(), 1);
+                                }
+
+                            }
+                        });
+                        if (l < sNum) {
+                            ll.addView(btn);
+                            l++;
+                        }
+                    }
+                    linear.addView(ll);
+
+                    k = k + 4;
+
+                }
+
+
             }
         }
+
+
 
 
 }
