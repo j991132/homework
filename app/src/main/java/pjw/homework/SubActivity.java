@@ -31,7 +31,7 @@ import java.util.Map;
 public class SubActivity extends AppCompatActivity {
     int i, j, k, l;
     int sNum, aNum ;
-    String key;
+    String key, subText;
     HashMap<Integer, Integer> color, value;
 
     LinearLayout linear, ll;
@@ -41,13 +41,15 @@ public class SubActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sub);
 //인텐트 넘어온 값 저장
         Intent intent = getIntent();
-        String subText = intent.getStringExtra("subName");
+//클래스 아래에 전역변수 선언한 후 따로 변수타입을 또 한 번 지정하면 지역변수로 바뀌어서 인식한다. 그냥 변수명만 써서 이용하자
+        subText = intent.getStringExtra("subName");
         sNum = intent.getIntExtra("btnNum", 0);
         aNum = intent.getIntExtra("actNum", 0);
 
 //타이틀에 넘어온 id값 표시하기
         TextView title = (TextView) findViewById(R.id.subjectname);
         title.setText(subText);
+//해시맵을 이렇게 위에 선언해야 지 for 아래에 선언하면 전에 있던 것이 덮어씌어 진다
         color = new HashMap<Integer, Integer>();
 
 
@@ -74,7 +76,7 @@ public class SubActivity extends AppCompatActivity {
                 btn.setId((i + 1));
 
                 btn.setLayoutParams(params);
-                color.put(btn.getId(), 2);
+                color.put(btn.getId(), 2);                  //초기 색깔 저장값은 2번으로 초록색
 
                 btn.setBackgroundColor(Color.GREEN);
 //토클키 설정하기
@@ -171,19 +173,17 @@ public class SubActivity extends AppCompatActivity {
 
 
         getHashMap(key);
-
-        Log.d("TAG", "복구시 해시맵");
-        System.out.println(value);
+        //System.out.println(value);   값이 잘 복구됬나 찍어봤다
+//복구된 해시맵이 널이 아니지만 복구매서드에 의해 해시맵은 생성됬다면 값이 비어있기 때문에
         if( value == null) {System.out.println("value is null");}
         if (value !=null) {
             if (value.isEmpty() == false) {
 
-                System.out.println(value);
                 addbtn();
             }
         }
     }
-
+// 화면 꺼짐시 해시맵 저장
     @Override
     protected void onPause()
     {
@@ -191,21 +191,17 @@ public class SubActivity extends AppCompatActivity {
 
 
         saveHashMap(key, color);
-        Log.d("TAG", "저장시 해시맵");
-        System.out.println(color);
+
     }
 
- //상태저장 매서드
+ //상태저장 매서드 - 해시맵을 json을 이용해서 형태변환후 통째로 저장하는 것인데 jsom을 미리 Gson 으로 라이브러리 짜 놓은 것을 이용해서 코딩을 간단히 줄인다.(라이브러리 추가작업 필요)
     protected void saveHashMap(String key, Map color )
     {
-        SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
+        SharedPreferences pref = getSharedPreferences( "SaveState"+subText, MODE_PRIVATE );
         SharedPreferences.Editor editor = pref.edit();
-        //editor.putInt( "studentnum", sNum);
+
         Log.d("TAG", "저장시 sNum"+sNum);
-/*        for   ( int s : color.keySet ())   {
-            editor . putInt(String.valueOf(s), color. get ( s ));
-        } editor . commit ();
-*/
+
         Gson gson = new Gson();
         String json = gson.toJson (color);
         Log.d("TAG", "저장 json 이후"+json);
@@ -217,17 +213,13 @@ public class SubActivity extends AppCompatActivity {
 
     }
 
-//상태복구 매서드
+//상태복구 매서드 - 복구할 때오 Gson 을 이용하여 복구한다 복구할땐 복구용 해시맵을 또 선언해준다
 
     public HashMap<Integer,Integer> getHashMap(String key) {
-       SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
-        //sNum = pref.getInt( "studentnum", sNum );
 
-/*
-        HashMap<Integer, Integer> map =    (HashMap <Integer, Integer>) pref . getAll ();
-        for   ( Integer s : map . keySet ())   {
-            Integer value = map . get ( s );
-*/
+//저장할 때 프리퍼런스 name을 액티비티 별로 가변적으로 주어 저장해야 해시맵이 중복되지 않는다
+        
+       SharedPreferences pref = getSharedPreferences( "SaveState"+subText, MODE_PRIVATE );
        Gson gson = new Gson();
         String json = pref.getString(key,(new JSONObject()).toString());
         Log.d("TAG", "복구 json 이후"+json);
@@ -235,9 +227,6 @@ public class SubActivity extends AppCompatActivity {
         value = new HashMap<Integer, Integer>();
         value =  gson.fromJson(json, type);
         return value;
-
-
-
         }
 
 
@@ -267,6 +256,7 @@ public class SubActivity extends AppCompatActivity {
                     btn.setId((i + 1));
 
                     btn.setLayoutParams(params);
+//복구 해시맵에 저장된 상태를 이용하여 토글 색을 저장하고 바꿔준다.
                     if (value.get(btn.getId()) == 1) {
                         //빨간색 표시
 
