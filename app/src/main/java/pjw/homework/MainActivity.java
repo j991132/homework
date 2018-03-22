@@ -1,5 +1,6 @@
 package pjw.homework;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -51,8 +52,59 @@ public class MainActivity extends AppCompatActivity
 		//sv = (ScrollView)findViewById(R.id.scrollView);
 		layout = ( LinearLayout ) findViewById( R.id.layout );
 		context = this;
+
+
 //초기화버튼 눌렀을때
 		resetBtn.setOnClickListener( new View.OnClickListener()
+		{
+			@Override
+			public void onClick( View view )
+			{
+				//다이얼로그생성
+				final Dialog reset = new Dialog( context );
+				reset.setTitle( "초기화 할까요?" );
+				reset.setContentView( R.layout.delete );
+				Button delBtn = ( Button ) reset.findViewById( R.id.delete );
+				Button cancelBtn = ( Button ) reset.findViewById( R.id.cancel );
+				// 다이얼로그 삭제버튼 누를 때
+
+				delBtn.setOnClickListener( new View.OnClickListener()
+				{
+					@Override
+					public void onClick( View view )
+					{
+						SharedPreferences pref = getSharedPreferences( "SaveState", MODE_PRIVATE );
+						pref.edit().clear().commit();
+						count = 0;
+						restoreFromSavedState();
+						layout.removeAllViews();
+						reset.dismiss();
+					}
+				} );
+				//다이얼로그 취소버튼 누를 때
+				cancelBtn.setOnClickListener( new View.OnClickListener()
+				{
+					@Override
+					public void onClick( View view )
+					{
+						reset.dismiss();
+					}
+				} );
+				reset.show();
+				//return true;
+			}
+		} );
+
+
+
+
+
+
+
+
+
+//이전 코드
+/*		resetBtn.setOnClickListener( new View.OnClickListener()
 		{
 			@Override
 			public void onClick( View view )
@@ -64,6 +116,8 @@ public class MainActivity extends AppCompatActivity
 				layout.removeAllViews();
 			}
 		} );
+*/
+
 //추가버튼 눌렀을때
 		addBtn.setOnClickListener( new View.OnClickListener()
 		{
@@ -121,6 +175,7 @@ public class MainActivity extends AppCompatActivity
 //각 버튼 눌렀을 때 액티비티 호출
 							btn[count - 1].setOnClickListener( new View.OnClickListener()
 															   {
+																   @SuppressLint("ResourceType")
 																   @Override
 																   public void onClick( View v )
 																   {
@@ -130,6 +185,7 @@ public class MainActivity extends AppCompatActivity
 																	   Intent intent = new Intent(MainActivity.this, SubActivity.class);
 																	   intent.putExtra("subName", subject[v.getId()-1]);
 																	   intent.putExtra("btnNum", studentnumber[v.getId()-1]);
+																	   intent.putExtra("actNum", v.getId());
 																	   startActivity(intent);
 																   }
 															   }
@@ -140,13 +196,13 @@ public class MainActivity extends AppCompatActivity
 								@Override
 								public boolean onLongClick( View view )
 								{
-									//다이얼로그생성
+								//다이얼로그생성
 									final Dialog delete = new Dialog( context );
 									delete.setTitle( "삭제할까요?" );
 									delete.setContentView( R.layout.delete );
 									Button delBtn = ( Button ) delete.findViewById( R.id.delete );
 									Button cancelBtn = ( Button ) delete.findViewById( R.id.cancel );
-									// 다이얼로그 삭제버튼 누를 때
+								// 다이얼로그 삭제버튼 누를 때
 									delBtn.setTag( view );    //델버튼에 롱터치view 버튼 태그로 바꿔서 연결
 									delBtn.setOnClickListener( new View.OnClickListener()
 									{
@@ -307,6 +363,7 @@ public class MainActivity extends AppCompatActivity
 				btn[i].setId( i + 1 );
                 btn[i].setOnClickListener( new View.OnClickListener()
 				{
+					@SuppressLint("ResourceType")
 					@Override
 					public void onClick( View v )
 					{
