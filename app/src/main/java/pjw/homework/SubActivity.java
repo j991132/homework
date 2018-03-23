@@ -35,10 +35,14 @@ public class SubActivity extends AppCompatActivity {
     HashMap<Integer, Integer> color, value;
 
     LinearLayout linear, ll;
+//정적이지 않은 매서드를 정적매서드에서 참조 리턴하기 위해 정적액티비티 변수 선언      
+    static SubActivity instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
+//정적이지 않은 매서드를 정적매서드에서 참조 리턴하기 위해 자기 자신을 변수에 지정
+        instance = this;
 //인텐트 넘어온 값 저장
         Intent intent = getIntent();
 //클래스 아래에 전역변수 선언한 후 따로 변수타입을 또 한 번 지정하면 지역변수로 바뀌어서 인식한다. 그냥 변수명만 써서 이용하자
@@ -174,6 +178,7 @@ public class SubActivity extends AppCompatActivity {
 
         getHashMap(key);
         //System.out.println(value);   값이 잘 복구됬나 찍어봤다
+
 //복구된 해시맵이 널이 아니지만 복구매서드에 의해 해시맵은 생성됬다면 값이 비어있기 때문에
         if( value == null) {System.out.println("value is null");}
         if (value !=null) {
@@ -218,7 +223,7 @@ public class SubActivity extends AppCompatActivity {
     public HashMap<Integer,Integer> getHashMap(String key) {
 
 //저장할 때 프리퍼런스 name을 액티비티 별로 가변적으로 주어 저장해야 해시맵이 중복되지 않는다
-        
+
        SharedPreferences pref = getSharedPreferences( "SaveState"+subText, MODE_PRIVATE );
        Gson gson = new Gson();
         String json = pref.getString(key,(new JSONObject()).toString());
@@ -226,9 +231,20 @@ public class SubActivity extends AppCompatActivity {
         java.lang.reflect.Type type = new TypeToken<HashMap<Integer,Integer>>(){}.getType();
         value = new HashMap<Integer, Integer>();
         value =  gson.fromJson(json, type);
+//복구시 복구해시맵에 저장후 프리퍼런스 지우기(이름이 같은 액티비티 새로 만들어 호출시 저장장소가 겹치지 않도록)
+        pref.edit().clear().commit();
         return value;
-        }
 
+        }
+// 정적이지 않은 매서드를 다른 액티비티에서 호출하기 위해서 정적메서드를 거쳐서 자신(객체)에 대한 참조를 리턴해 준다
+        public static SubActivity getInstance(){
+        return instance;
+        }
+//다른액티비티에서 호출할 정적이지 않은 매서드
+        public void delSubStored(){
+            SharedPreferences pref = getSharedPreferences( "SaveState"+subText, MODE_PRIVATE );
+            pref.edit().clear().commit();
+        }
 
 
 // 복구시 버튼 재 배치
